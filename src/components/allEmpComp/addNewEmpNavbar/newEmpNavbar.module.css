@@ -1,0 +1,49 @@
+.add_new_emp_navbar_div{
+    display: flex;
+    flex-direction: row;
+    height: 32px;
+    width: 100%;
+	gap: 20px;
+	user-select: none;
+	/* padding-bottom: 2px; */
+	border-bottom: 1px solid #A2A1A833;
+
+}
+
+.add_new_emp_navbar_item {
+	height: 22px;
+	width: max-content;
+	text-decoration: none;
+
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: black;
+}
+
+.add_new_emp_navbar_item_active {
+	height: 22px;
+	width: max-content;
+	text-decoration: none;
+	transform: scale(1.08);
+	color: #7152F3;
+	
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding-bottom: 8px;
+	border-bottom: 3px solid #7152F3;
+}
+
+.add_new_emp_navbar_item_name{
+	font-size: 16px;
+	font-weight: 300;
+	line-height: 24px;
+}
+
+.add_new_emp_navbar_item_name_active{
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 24px;
+
+}

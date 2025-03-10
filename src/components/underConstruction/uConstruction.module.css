@@ -1,0 +1,13 @@
+.under_construction {
+	display: grid;
+	place-items: center;
+	width: 70%;
+	max-height: 90vh;
+	align-content: center;
+	margin: 40px;
+	border-radius: 25px;
+
+	/* width: 250px; */
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	text-align: center;
+}

@@ -1,0 +1,325 @@
+databse create query:
+CREATE DATABASE hrms;
+
+use databse:
+USE hrms;
+
+Although hrms is set-up as the default schema.
+
+table 1 users one to one relation with table 3 Account details 
+table 1 users one to one relation with table 4 Additional information.
+table 1 users one to many relation with table 2 Address info because user can have multiple addresses
+
+
+table 1:  Personal Information  (MAIN TABLE)
+fields: 
+user_id: NOT NULL
+
+First Name. NOT NULL
+Last Name: NOT NULL
+Email: NOT NULL UNIQUE
+Phone Number: INT NOT NULL
+Date of Birth: (Date picker) – required, user must be at least 18 years old. Format: YYYY-MM-DD.
+
+ALTER TABLE Persons AUTO_INCREMENT=100;
+
+table 2 : Address Information
+
+One to many relationship (user can have multiple addresses )
+
+Dynamic Addresses:
+Allow the user to add or remove multiple addresses.
+
+fields:
+user_id(foreign key) from table 1
+
+For Each Address:
+Address Line 1 & Address Line 2: (Text inputs) – required for Address Line 1.
+
+City: (Text input) – required.
+Country: (Select dropdown) – required.
+State/Province: (Select dropdown) – required.
+ZIP/Postal Code: (Text/number input) – required, validate against country-specific formats
+
+table 3: Account Details
+Fields:
+
+user_id(foreign key) from table 1
+
+Username: (Text input) – required.
+Password: (Password input) – required.
+Confirm Password: (Password input) – {Front-End only}
+question id (foreign key) from question table.
+securtiy answer: varchar(255)
+
+
+table 4: Additional information
+Fields:
+
+user_id(foreign key) from table 1
+
+profile picture: BLOB (optional field)
+Preferences: SET/ENUM (options field) newsletter,notifications, etc.
+Subscription plans. (options field)
+refferal code. VARCHAR(50)
+
+Extra Table: 
+
+Questions table:
+Fields:
+
+user_id(foreign key) from table 1
+Question id not null
+Security Question varchar not null
+
+Payment Information Table: 
+Fields:
+
+user_id(foreign key) from table 1
+
+(price field maybe)
+Credit card number: Not Null
+Expiration Date: DATE (check it should be future date)
+CVV:    INT
+
+
+
+
+-----------------------------------QUERIES---------------------------------------------
+
+
+Query for table 1:
+
+CREATE TABLE personal_information (
+    user_id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    mobile_number VARCHAR(15) NOT NULL,  
+    email VARCHAR(100) UNIQUE,
+    dob DATE NOT NULL,
+    create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    PRIMARY KEY(user_id)
+);
+
+
+Making user_id start from 100:
+
+ALTER TABLE personal_information AUTO_INCREMENT = 100;
+
+
+DATA ENTRY QUERY:
+INSERT INTO personal_information (first_name, last_name, mobile_number, email, dob)
+VALUES ('Harsh', 'Kumar', '123-456-7890', 'harsh@example.com', '2000-11-17');
+
+delete: 
+DELETE FROM personal_information WHERE user_id = 1;
+
+View: 
+SELECT * FROM personal_information;
+
+TABLE 2: USER ADDRESSES:
+
+CREATE TABLE user_addresses (
+    address_id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    address_line_1 VARCHAR(255) NOT NULL,
+    address_line_2 VARCHAR(255),
+    city VARCHAR(100) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    state_province VARCHAR(100) NOT NULL,
+    zip_postal_code VARCHAR(20) NOT NULL,
+    PRIMARY KEY (address_id),
+    FOREIGN KEY (user_id) REFERENCES personal_information(user_id) ON DELETE CASCADE
+);
+
+INSERT INTO user_addresses (user_id, address_line_1, address_line_2, city, country, state_province, zip_postal_code)
+VALUES (100, 'near bus stand', 'house no 100', 'Karnal', 'India', 'Haryana', '132041');
+
+
+remove address:
+DELETE FROM user_addresses WHERE address_id = 100;
+
+View:
+SELECT * FROM user_addresses;
+
+DROP TABLE users;
+
+TABLE 3: ACCOUNT DETAILS:
+
+CREATE TABLE user_account_details (
+    account_id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    username VARCHAR(80) NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    question_id INT NOT NULL,
+    security_answer VARCHAR(150) NOT NULL,
+    PRIMARY KEY (account_id),
+    FOREIGN KEY (question_id) REFERENCES security_questions(question_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES personal_information(user_id) ON DELETE CASCADE
+);
+
+
+
+INSERT INTO user_account_details (user_id, question_id, username, password, security_answer)
+VALUES (102, '1', 'harsh@123', 'password', 'Harsh');
+
+SELECT * FROM user_account_details;
+
+
+TABLE 4: Additional information
+Fields:
+
+CREATE TABLE user_additional_info (
+    user_id INT NOT NULL,
+    profile_picture BLOB,
+    bio TEXT,
+    preferences SET('newsletter', 'notifications', 'mail'),     //Multiple Values
+    subscription_plan ENUM('Free', 'Standard', 'Premium') NOT NULL,  // Subscription Plan only one value
+    referral_code VARCHAR(255),  -- Referral code (nullable)
+    FOREIGN KEY (user_id) REFERENCES personal_information(user_id) ON DELETE CASCADE
+);
+
+SELECT * FROM user_additional_info;
+
+EXTRA TABLES:
+Table 5: Questions table:
+
+CREATE TABLE security_questions (
+    question_id INT NOT NULL,
+    security_question VARCHAR(250),
+    PRIMARY KEY(question_id)
+);
+
+SELECT * FROM security_questions;
+
+
+Table 6: Payment Information Table:
+
+CREATE TABLE user_payment_info (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    credit_card_number VARCHAR(19),
+    expiration_date DATE,
+    cvv VARCHAR(4),
+    FOREIGN KEY (user_id) REFERENCES personal_information(user_id) ON DELETE CASCADE
+);
+
+SELECT * FROM user_payment_info;
+
+
+
+
+-----------------------------------QUERIES---------------------------------------------
+
+Reset Table:
+TRUNCATE TABLE table_name;
+
+To reset the parent table and auto increment as well follow this steps:
+
+Disable Foreign Keys:
+SET FOREIGN_KEY_CHECKS = 0;
+
+Truncate table:
+TRUNCATE TABLE table_name;
+
+Enable Foreign Keys:
+SET FOREIGN_KEY_CHECKS = 0;
+
+------------------------------------DUMMY DATA------------------------------------------
+
+-- Insert into security_questions
+INSERT INTO security_questions (question_id, security_question) VALUES
+(1, 'What is your mother\'s maiden name?'),
+(2, 'What is the name of your first pet?'),
+(3, 'What was the name of your elementary school?');
+
+-- Insert into personal_information (10 entries)
+INSERT INTO personal_information (first_name, last_name, mobile_number, email, dob) VALUES
+('Aarav', 'Sharma', '9876543210', 'aarav.sharma@example.com', '1990-04-15'),
+('Isha', 'Patel', '9876543211', 'isha.patel@example.com', '1988-06-22'),
+('Rohit', 'Kumar', '9876543212', 'rohit.kumar@example.com', '1992-01-30'),
+('Priya', 'Gupta', '9876543213', 'priya.gupta@example.com', '1995-12-10'),
+('Raj', 'Singh', '9876543214', 'raj.singh@example.com', '1989-09-05'),
+('Neha', 'Sharma', '9876543215', 'neha.sharma@example.com', '1993-02-18'),
+('Vikram', 'Verma', '9876543216', 'vikram.verma@example.com', '1991-07-02'),
+('Sanya', 'Mehta', '9876543217', 'sanya.mehta@example.com', '1994-03-25'),
+('Manoj', 'Reddy', '9876543218', 'manoj.reddy@example.com', '1987-11-07'),
+('Kavya', 'Desai', '9876543219', 'kavya.desai@example.com', '1996-08-14');
+
+-- Insert into user_addresses (10 entries)
+INSERT INTO user_addresses (user_id, address_line_1, address_line_2, city, country, state_province, zip_postal_code) VALUES
+(1, '123 MG Road', 'Flat 101, Tower A', 'Bangalore', 'India', 'Karnataka', '560001'),
+(2, '456 Park Avenue', 'Near Metro Station', 'Mumbai', 'India', 'Maharashtra', '400001'),
+(3, '789 Ocean Drive', '', 'Chennai', 'India', 'Tamil Nadu', '600001'),
+(4, '12 Rajput Street', 'Building B, 2nd Floor', 'Delhi', 'India', 'Delhi', '110001'),
+(5, '34 New Bazaar', 'Opposite Police Station', 'Hyderabad', 'India', 'Telangana', '500001'),
+(6, '56 Main Road', 'Behind IT Park', 'Pune', 'India', 'Maharashtra', '411001'),
+(7, '78 Industrial Area', '', 'Kolkata', 'India', 'West Bengal', '700001'),
+(8, '90 Heritage Heights', 'Sector 15', 'Noida', 'India', 'Uttar Pradesh', '201301'),
+(9, '11 Central Park', '', 'Ahmedabad', 'India', 'Gujarat', '380001'),
+(10, '22 Green Park', 'Next to City Mall', 'Jaipur', 'India', 'Rajasthan', '302001');
+
+-- Insert into user_account_details (10 entries)
+INSERT INTO user_account_details (user_id, username, password, question_id, security_answer) VALUES
+(1, 'aarav_sharma', 'password123', 1, 'Kumari'),
+(2, 'isha_patel', 'password456', 2, 'Tommy'),
+(3, 'rohit_kumar', 'password789', 3, 'St. Xavier\'s'),
+(4, 'priya_gupta', 'password101', 1, 'Singh'),
+(5, 'raj_singh', 'password202', 2, 'Bobby'),
+(6, 'neha_sharma', 'password303', 3, 'DPS'),
+(7, 'vikram_verma', 'password404', 1, 'Sharma'),
+(8, 'sanya_mehta', 'password505', 2, 'Whiskers'),
+(9, 'manoj_reddy', 'password606', 3, 'Greenwood'),
+(10, 'kavya_desai', 'password707', 1, 'Patel');
+
+-- Insert into user_additional_info (10 entries)
+INSERT INTO user_additional_info (user_id, profile_picture, bio, preferences, subscription_plan, referral_code) VALUES
+(1, NULL, 'Tech enthusiast and software developer.', 'newsletter,notifications', 'Premium', 'REF123'),
+(2, NULL, 'Digital marketer and content creator.', 'newsletter', 'Standard', 'REF124'),
+(3, NULL, 'Fitness fanatic and foodie.', 'notifications', 'Free', 'REF125'),
+(4, NULL, 'Travel blogger and adventurer.', 'newsletter,mail', 'Premium', 'REF126'),
+(5, NULL, 'Music lover and guitarist.', 'mail', 'Free', 'REF127'),
+(6, NULL, 'Yoga instructor and health coach.', 'newsletter,notifications', 'Standard', 'REF128'),
+(7, NULL, 'Startup founder and investor.', 'newsletter', 'Premium', 'REF129'),
+(8, NULL, 'Fashion designer and entrepreneur.', 'notifications,mail', 'Free', 'REF130'),
+(9, NULL, 'Photographer and cinematographer.', 'newsletter', 'Standard', 'REF131'),
+(10, NULL, 'Content writer and storyteller.', 'notifications', 'Premium', 'REF132');
+
+-- Insert into user_payment_info (10 entries)
+INSERT INTO user_payment_info (user_id, credit_card_number, expiration_date, cvv) VALUES
+(1, '4111111111111111', '2025-12-31', '123'),
+(2, '4222222222222222', '2026-11-30', '234'),
+(3, '4333333333333333', '2024-10-31', '345'),
+(4, '4444444444444444', '2025-09-30', '456'),
+(5, '4555555555555555', '2027-08-31', '567'),
+(6, '4666666666666666', '2026-07-31', '678'),
+(7, '4777777777777777', '2025-06-30', '789'),
+(8, '4888888888888888', '2027-05-31', '890'),
+(9, '4999999999999999', '2024-04-30', '901'),
+(10, '5000000000000000', '2028-03-31', '012');
+
+
+------------------------------------DUMMY DATA------------------------------------------
+------------------------------------SELECT QUERIES------------------------------------------
+
+SELECT * FROM personal_information;
+SELECT * FROM user_account_details;
+SELECT * FROM security_questions;
+SELECT * FROM user_additional_info;
+SELECT * FROM user_addresses;
+SELECT * FROM user_payment_info;
+
+
+------------------------------------SELECT QUERIES------------------------------------------
+
+Creating index for faster search.
+CREATE INDEX idx_email ON personal_information (email);
+
+Email Validation Db query:
+SELECT 1 FROM personal_information WHERE email = 'user@example.com' LIMIT 1;
+
+For Mobile Number:
+CREATE INDEX idx_mobile_number ON personal_information (mobile_number);
+
+
+

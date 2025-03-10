@@ -1,0 +1,5 @@
+.main_div {
+	display: flex;
+	flex-direction: row;
+	background-color: inherit;
+}

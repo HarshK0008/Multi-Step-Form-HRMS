@@ -1,0 +1,28 @@
+.search_tab{
+    height: 50px;
+    width: 100px;
+    min-width: 261px;
+    display:  flex;
+    align-items: center;
+    border: 1px solid #a2a1a8b5;
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+.search_svg {
+    margin: 10px;
+}
+
+
+.search_tab_input_field {
+    height: 30px;
+    width: 100%;
+    min-width: 120px;
+    max-width: 200px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background-color: transparent;
+    color: #16151c;
+
+}

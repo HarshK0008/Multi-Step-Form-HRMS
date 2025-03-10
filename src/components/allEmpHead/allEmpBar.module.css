@@ -1,0 +1,26 @@
+.all_employees_bar{
+    min-height: 60px;
+    max-height: 82px;
+    margin-top: 20px;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.all_employees_bar_heading{
+    width: inherit;
+    margin-left: 30px;
+}
+
+.all_employees_bar_right_half{
+    width: inherit;
+    min-width: 400px;
+    max-width: 565px;
+}
+/* 
+.all_employees_bar_right_profile_tab{
+
+} */
