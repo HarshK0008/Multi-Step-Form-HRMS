@@ -110,6 +110,3 @@ The app includes multiple steps, such as personal information, address details, 
 * **Persist Form Data** : Save user progress in local storage, so data persists even if the user leaves the page and returns later.
 * **Responsive Navigation** : Ensure the "Next" button is only enabled when all required fields in the current step are valid.
 
----
-
-This README file now includes an expanded description of the project's requirements, clearly outlining the multi-step form, validation processes, and asynchronous behaviors, as well as adding specific details related to each step and feature of the form.
