@@ -6,7 +6,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 1. **Clone the repository** : Clone the repository from the GitHub link to your local machine or code editor.
 
-   `Clone the Repo: git clone <repository-url`
+   `Clone the Repo: git clone <repository-url>`
 2. **Install dependencies** : Run the following command to install all the dependencies:
 
 ```bash
