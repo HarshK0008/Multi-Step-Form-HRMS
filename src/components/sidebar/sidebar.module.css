@@ -45,6 +45,11 @@
 	gap: 16px;
 }
 
+.sidebar_menu_item:hover {
+	border-radius: 0px 15px 15px 0px;
+	background-color: #7252f333;
+
+}
 .sidebar_menu_item_active {
 	height: 50px;
 	width: 100%;
